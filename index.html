@@ -3,117 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Reframe | Zen Mode</title>
+    <title>Nature Reframe | Daily Growth</title>
     <style>
         :root {
             --forest-green: #2D5A27;
             --leaf-green: #91AC8F;
             --sky-blue: #E3F2FD;
             --earth-brown: #6D4C41;
+            --soft-white: rgba(255, 255, 255, 0.9);
         }
 
         body {
             margin: 0;
-            font-family: 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(180deg, #E3F2FD 0%, #C8E6C9 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             color: var(--forest-green);
-            overflow: hidden;
         }
 
         .container {
             width: 85%;
             max-width: 400px;
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--soft-white);
             backdrop-filter: blur(15px);
-            padding: 2.5rem;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            padding: 2rem;
+            border-radius: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             text-align: center;
         }
 
+        .daily-seed {
+            background: #fdfdfd;
+            border: 1px dashed var(--leaf-green);
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: var(--earth-brown);
+            font-style: italic;
+        }
+
         .sound-toggle {
-            background: none;
+            background: white;
             border: 1px solid var(--leaf-green);
             color: var(--forest-green);
-            padding: 5px 15px;
+            padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
         }
 
         textarea {
             width: 100%;
-            height: 100px;
+            height: 110px;
             border: 1.5px solid var(--leaf-green);
-            border-radius: 20px;
+            border-radius: 18px;
             padding: 1rem;
-            margin: 1rem 0;
+            margin-bottom: 1rem;
             box-sizing: border-box;
             font-size: 1rem;
             outline: none;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
         button.main-btn {
             background: var(--forest-green);
             color: white;
             border: none;
-            padding: 1.2rem 2rem;
+            padding: 1rem;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+            font-size: 1rem;
         }
 
         #output {
             margin-top: 1.5rem;
-            padding: 1rem;
+            padding: 1.2rem;
             border-radius: 20px;
             display: none;
-            background: #f0f7ef;
-            line-height: 1.6;
-            animation: slideUp 0.5s ease-out;
+            background: #eef7ee;
+            border-left: 4px solid var(--forest-green);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="sound-toggle" onclick="toggleSound()" id="soundBtn">🔈 Play Forest Birds</button>
+    <div class="daily-seed" id="dailySeed">
+        🌱 Loading today's seed...
+    </div>
+
+    <button class="sound-toggle" onclick="toggleSound()" id="soundBtn">🔈 Nature Sounds: Off</button>
+    
     <h1>Nature Reframe 🌿</h1>
-    <p>Release your thoughts to the forest.</p>
+    <p style="margin-top: -10px; margin-bottom: 20px; opacity: 0.8;">Turn your storms into sunlight.</p>
     
-    <textarea id="userInput" placeholder="How are you really feeling?"></textarea>
+    <textarea id="userInput" placeholder="What's on your mind? (Loneliness, Anger, Stress...)"></textarea>
     
-    <button class="main-btn" onclick="transformThought()">Transform & Release</button>
+    <button class="main-btn" onclick="transformThought()">Transform Thought</button>
 
     <div id="output"></div>
 </div>
 
-<!-- Background Forest Audio -->
 <audio id="natureSound" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    <!-- Using a placeholder, in a real app we'd use a forest .mp3 -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+    // Daily Seeds Logic
+    const seeds = [
+        "Your growth is not always visible, but it is always happening.",
+        "Like the forest after rain, you will smell sweeter and stand taller after the storm.",
+        "One leaf doesn't make a tree. Give yourself time to build your strength.",
+        "Even the sun must set to let the world rest. It's okay for you to rest too.",
+        "You don't have to be perfect to be a beautiful part of nature."
+    ];
+
+    // Set the daily seed based on the day of the year
+    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+    document.getElementById('dailySeed').innerText = "Today's Seed: " + seeds[dayOfYear % seeds.length];
+
     let isPlaying = false;
     const audio = document.getElementById('natureSound');
 
     function toggleSound() {
         if (!isPlaying) {
             audio.play();
-            document.getElementById('soundBtn').innerText = "🔊 Mute Forest";
+            document.getElementById('soundBtn').innerText = "🔊 Nature Sounds: On";
+            document.getElementById('soundBtn').style.background = "#DFF0D8";
         } else {
             audio.pause();
-            document.getElementById('soundBtn').innerText = "🔈 Play Forest Birds";
+            document.getElementById('soundBtn').innerText = "🔈 Nature Sounds: Off";
+            document.getElementById('soundBtn').style.background = "white";
         }
         isPlaying = !isPlaying;
     }
@@ -123,27 +154,18 @@
         const outputDiv = document.getElementById('output');
         
         const responses = {
-            lonely: [
-                "🌿 The stars are far apart, yet they light up the same sky. You are connected in ways you can't see yet.",
-                "🌱 Being alone is when your soul does its deepest growing. Be patient with yourself."
-            ],
-            angry: [
-                "🌊 Let your anger be like a wave. It rises high, but it must eventually crash and join the calm ocean.",
-                "🍃 A strong wind may bend the tree, but it also strengthens the trunk. Breathe through the storm."
-            ],
-            default: [
-                "✨ You are a vital part of this world's ecosystem. Your presence matters.",
-                "☀️ Just as the sun rises every day, you have a fresh chance to start over right now."
-            ]
+            lonely: "🌿 Nature is never truly lonely; the roots always talk to the trees. You are part of something bigger than this moment.",
+            angry: "🌊 The ocean is powerful but calm underneath. Take three deep breaths and let the waves of anger pull back.",
+            stress: "🍃 A heavy snow can bend a branch, but the branch doesn't break—it eventually lets the snow fall. Release your burden.",
+            default: "☀️ You have survived 100% of your hardest days. You are as resilient as the earth itself."
         };
 
-        let category = "default";
-        if (input.includes("lonely")) category = "lonely";
-        if (input.includes("angry") || input.includes("mad")) category = "angry";
+        let result = responses.default;
+        if (input.includes("lonely")) result = responses.lonely;
+        else if (input.includes("angry") || input.includes("mad")) result = responses.angry;
+        else if (input.includes("stress") || input.includes("sad") || input.includes("tired")) result = responses.stress;
 
-        const randomPick = responses[category][Math.floor(Math.random() * responses[category].length)];
-
-        outputDiv.innerHTML = `<strong>Nature's Response:</strong><br>${randomPick}`;
+        outputDiv.innerHTML = `<strong>Growth Note:</strong><br>${result}`;
         outputDiv.style.display = 'block';
         document.getElementById('userInput').value = "";
     }
