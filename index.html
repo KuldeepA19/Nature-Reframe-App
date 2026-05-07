@@ -1,22 +1,74 @@
-<!-- Add this section inside your <style> tag -->
-.stats-box {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    width: 100%;
-}
-.stat-card {
-    background: white;
-    padding: 10px;
-    border-radius: 15px;
-    font-size: 0.75rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-}
-/* ... existing styles ... */
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nature Reframe Pro</title>
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root { --forest: #2D5A27; --mint: #DCE7DA; --accent: #6D4C41; }
+        body { margin: 0; background: #E3F2FD; font-family: sans-serif; display: flex; justify-content: center; min-height: 100vh; color: var(--forest); }
+        .app-shell { width: 100%; max-width: 450px; background: linear-gradient(180deg, #FFFFFF 0%, #F1F8E9 100%); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .garden-area { height: 120px; display: flex; align-items: flex-end; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--mint); width: 100%; justify-content: center; }
+        .plant { font-size: 2rem; animation: grow 0.5s ease-out; }
+        @keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+        .input-card { width: 100%; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.03); box-sizing: border-box; }
+        textarea { width: 100%; height: 80px; border: none; background: #F5F5F5; border-radius: 15px; padding: 15px; font-size: 1rem; margin-bottom: 15px; box-sizing: border-box; outline: none; }
+        .btn-glow { background: var(--forest); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; font-size: 1rem; cursor: pointer; }
+        .stats-box { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+        .stat-card { background: white; padding: 10px; border-radius: 15px; font-size: 0.75rem; text-align: center; border: 1px solid var(--mint); }
+        .history-item { background: var(--mint); padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 0.8rem; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
 
-<!-- Add this inside your <div class="app-shell"> before the History Card -->
-<div class="stats-box">
-    <div class="stat-card">🌱 Plants Grown: <span id="plantCount">1</span></div>
-    <div class="stat-card">✨ Peace Level: <span id="peaceLevel">10%</span></div>
+<div class="app-shell">
+    <div class="garden-area" id="garden"><span class="plant">🌳</span></div>
+    <div class="input-card">
+        <h2 style="margin:0 0 10px 0">Instant Reframe</h2>
+        <textarea id="thoughtInput" placeholder="What's on your mind?"></textarea>
+        <button class="btn-glow" onclick="processThought()">Plant a Positive Thought</button>
+    </div>
+    <div class="stats-box">
+        <div class="stat-card">🌱 Plants: <span id="pCount">1</span></div>
+        <div class="stat-card">✨ Peace: <span id="pLevel">10%</span></div>
+    </div>
+    <div style="width:100%; margin-top:20px;">
+        <p><strong>Recent Growth:</strong></p>
+        <div id="historyList"></div>
+    </div>
 </div>
+
+<script>
+    let count = 1;
+    function processThought() {
+        const input = document.getElementById('thoughtInput').value;
+        if(!input) return;
+
+        // Vibrate Phone (Android only)
+        if (window.navigator && window.navigator.vibrate) { window.navigator.vibrate(50); }
+
+        // Update Stats
+        count++;
+        document.getElementById('pCount').innerText = count;
+        document.getElementById('pLevel').innerText = (count * 10) + "%";
+
+        // Grow Plant
+        const plants = ["🌱", "🌿", "🍀", "🌸", "🌻", "🌳"];
+        const newPlant = document.createElement('span');
+        newPlant.className = 'plant';
+        newPlant.innerText = plants[Math.floor(Math.random() * plants.length)];
+        document.getElementById('garden').appendChild(newPlant);
+
+        // Add to History
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerText = "Transformed: " + input.substring(0, 20) + "...";
+        document.getElementById('historyList').prepend(item);
+        
+        document.getElementById('thoughtInput').value = "";
+    }
+</script>
+</body>
+</html>
