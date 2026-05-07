@@ -1,21 +1,9 @@
-// Example of the "Positive Reframe" Engine
-const reframeLogic = (userIssue) => {
-  const prompts = {
-    lonely: "This is a season of self-discovery. You are preparing for the right people to enter your life.",
-    angry: "Your passion is high right now; let's redirect that energy into a win today.",
-    stress: "Stress is just a sign that you care deeply. Let's break this into one tiny step."
-  };
-  
-  // Logic to analyze keywords and return an instant positive note
-  return instantResponse;
-};
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Reframe | Your Digital Sanctuary</title>
+    <title>Nature Reframe | Zen Mode</title>
     <style>
         :root {
             --forest-green: #2D5A27;
@@ -26,100 +14,138 @@ const reframeLogic = (userIssue) => {
 
         body {
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Helvetica Neue', sans-serif;
             background: linear-gradient(180deg, #E3F2FD 0%, #C8E6C9 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: var(--forest-green);
+            overflow: hidden;
         }
 
         .container {
-            width: 90%;
+            width: 85%;
             max-width: 400px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 2.5rem;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             text-align: center;
         }
 
-        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        p { font-size: 0.9rem; color: var(--earth-brown); }
+        .sound-toggle {
+            background: none;
+            border: 1px solid var(--leaf-green);
+            color: var(--forest-green);
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
 
         textarea {
             width: 100%;
-            height: 120px;
-            border: 2px solid var(--leaf-green);
-            border-radius: 15px;
+            height: 100px;
+            border: 1.5px solid var(--leaf-green);
+            border-radius: 20px;
             padding: 1rem;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
             box-sizing: border-box;
             font-size: 1rem;
-            background: white;
-            resize: none;
+            outline: none;
         }
 
-        button {
+        button.main-btn {
             background: var(--forest-green);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1.2rem 2rem;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
         }
-
-        button:active { transform: scale(0.95); }
 
         #output {
             margin-top: 1.5rem;
             padding: 1rem;
-            border-radius: 15px;
+            border-radius: 20px;
             display: none;
-            background: white;
-            border-left: 5px solid var(--forest-green);
-            animation: fadeIn 1s;
+            background: #f0f7ef;
+            line-height: 1.6;
+            animation: slideUp 0.5s ease-out;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <button class="sound-toggle" onclick="toggleSound()" id="soundBtn">🔈 Play Forest Birds</button>
     <h1>Nature Reframe 🌿</h1>
-    <p>Let out your stress. Let nature transform it.</p>
+    <p>Release your thoughts to the forest.</p>
     
-    <textarea id="userInput" placeholder="I'm feeling lonely because..."></textarea>
+    <textarea id="userInput" placeholder="How are you really feeling?"></textarea>
     
-    <button onclick="transformThought()">Transform My Thought</button>
+    <button class="main-btn" onclick="transformThought()">Transform & Release</button>
 
     <div id="output"></div>
 </div>
 
+<!-- Background Forest Audio -->
+<audio id="natureSound" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <!-- Using a placeholder, in a real app we'd use a forest .mp3 -->
+</audio>
+
 <script>
+    let isPlaying = false;
+    const audio = document.getElementById('natureSound');
+
+    function toggleSound() {
+        if (!isPlaying) {
+            audio.play();
+            document.getElementById('soundBtn').innerText = "🔊 Mute Forest";
+        } else {
+            audio.pause();
+            document.getElementById('soundBtn').innerText = "🔈 Play Forest Birds";
+        }
+        isPlaying = !isPlaying;
+    }
+
     function transformThought() {
         const input = document.getElementById('userInput').value.toLowerCase();
         const outputDiv = document.getElementById('output');
-        let response = "";
+        
+        const responses = {
+            lonely: [
+                "🌿 The stars are far apart, yet they light up the same sky. You are connected in ways you can't see yet.",
+                "🌱 Being alone is when your soul does its deepest growing. Be patient with yourself."
+            ],
+            angry: [
+                "🌊 Let your anger be like a wave. It rises high, but it must eventually crash and join the calm ocean.",
+                "🍃 A strong wind may bend the tree, but it also strengthens the trunk. Breathe through the storm."
+            ],
+            default: [
+                "✨ You are a vital part of this world's ecosystem. Your presence matters.",
+                "☀️ Just as the sun rises every day, you have a fresh chance to start over right now."
+            ]
+        };
 
-        if (input.includes("lonely")) {
-            response = "🌿 Like a seedling in the soil, being alone is your time to grow deep roots. You are becoming stronger for the forest ahead.";
-        } else if (input.includes("angry") || input.includes("mad")) {
-            response = "🔥 Anger is just energy. Like a wildfire, it can clear the path for new growth. Take a deep breath; let the smoke clear.";
-        } else if (input.includes("stress") || input.includes("tired")) {
-            response = "🌊 Even the strongest rivers have calm pools. It is okay to be still. Your worth is not defined by your speed.";
-        } else {
-            response = "✨ You have the strength of an oak tree within you. This moment is just a passing breeze.";
-        }
+        let category = "default";
+        if (input.includes("lonely")) category = "lonely";
+        if (input.includes("angry") || input.includes("mad")) category = "angry";
 
-        outputDiv.innerHTML = `<strong>A Positive Note:</strong><br>${response}`;
+        const randomPick = responses[category][Math.floor(Math.random() * responses[category].length)];
+
+        outputDiv.innerHTML = `<strong>Nature's Response:</strong><br>${randomPick}`;
         outputDiv.style.display = 'block';
-        document.getElementById('userInput').value = ""; // Clears the "bad" thought
+        document.getElementById('userInput').value = "";
     }
 </script>
 
