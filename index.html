@@ -3,171 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Reframe | Daily Growth</title>
+    <title>Nature Reframe Pro</title>
+    <!-- The Manifest Link (For Android Install) -->
+    <link rel="manifest" href="/manifest.json">
     <style>
         :root {
-            --forest-green: #2D5A27;
-            --leaf-green: #91AC8F;
-            --sky-blue: #E3F2FD;
-            --earth-brown: #6D4C41;
-            --soft-white: rgba(255, 255, 255, 0.9);
+            --forest: #2D5A27;
+            --mint: #DCE7DA;
+            --accent: #6D4C41;
         }
 
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(180deg, #E3F2FD 0%, #C8E6C9 100%);
+            background: #E3F2FD;
+            font-family: 'Inter', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            color: var(--forest-green);
+            color: var(--forest);
         }
 
-        .container {
-            width: 85%;
-            max-width: 400px;
-            background: var(--soft-white);
-            backdrop-filter: blur(15px);
-            padding: 2rem;
-            border-radius: 35px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            text-align: center;
+        .app-shell {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F1F8E9 100%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 50px rgba(0,0,0,0.05);
         }
 
-        .daily-seed {
-            background: #fdfdfd;
-            border: 1px dashed var(--leaf-green);
-            padding: 15px;
-            border-radius: 20px;
+        /* The Mood Garden */
+        .garden-area {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
             margin-bottom: 20px;
-            font-size: 0.85rem;
-            color: var(--earth-brown);
-            font-style: italic;
+            border-bottom: 2px solid var(--mint);
+            width: 100%;
+            justify-content: center;
         }
 
-        .sound-toggle {
+        .plant { font-size: 2rem; animation: grow 0.5s ease-out; }
+        @keyframes grow { from { transform: scale(0); } to { transform: scale(1); } }
+
+        .input-card {
+            width: 100%;
             background: white;
-            border: 1px solid var(--leaf-green);
-            color: var(--forest-green);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            margin-bottom: 1.5rem;
-            transition: 0.3s;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+            box-sizing: border-box;
         }
 
         textarea {
             width: 100%;
-            height: 110px;
-            border: 1.5px solid var(--leaf-green);
-            border-radius: 18px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-sizing: border-box;
+            height: 80px;
+            border: none;
+            background: #F5F5F5;
+            border-radius: 15px;
+            padding: 15px;
             font-size: 1rem;
+            margin-bottom: 15px;
+            box-sizing: border-box;
             outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        button.main-btn {
-            background: var(--forest-green);
+        .btn-glow {
+            background: var(--forest);
             color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
             width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
             font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        #output {
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            border-radius: 20px;
-            display: none;
-            background: #eef7ee;
-            border-left: 4px solid var(--forest-green);
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .btn-glow:active { transform: scale(0.98); opacity: 0.9; }
+
+        .history-card {
+            margin-top: 20px;
+            width: 100%;
+            font-size: 0.8rem;
+            color: var(--accent);
         }
 
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .history-item {
+            background: var(--mint);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="daily-seed" id="dailySeed">
-        🌱 Loading today's seed...
+<div class="app-shell">
+    <div class="garden-area" id="garden">
+        <!-- Plants will appear here as you reframe -->
+        <span class="plant">🌳</span>
     </div>
 
-    <button class="sound-toggle" onclick="toggleSound()" id="soundBtn">🔈 Nature Sounds: Off</button>
-    
-    <h1>Nature Reframe 🌿</h1>
-    <p style="margin-top: -10px; margin-bottom: 20px; opacity: 0.8;">Turn your storms into sunlight.</p>
-    
-    <textarea id="userInput" placeholder="What's on your mind? (Loneliness, Anger, Stress...)"></textarea>
-    
-    <button class="main-btn" onclick="transformThought()">Transform Thought</button>
+    <div class="input-card">
+        <h2 style="margin-top:0">Instant Reframe</h2>
+        <textarea id="thoughtInput" placeholder="I'm feeling angry about..."></textarea>
+        <button class="btn-glow" onclick="processThought()">Plant a Positive Thought</button>
+    </div>
 
-    <div id="output"></div>
+    <div id="reframeResult" style="margin-top: 20px; text-align: center; font-weight: 500; display: none;"></div>
+
+    <div class="history-card">
+        <p><strong>Your Recent Growth:</strong></p>
+        <div id="historyList"></div>
+    </div>
 </div>
 
-<audio id="natureSound" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-    // Daily Seeds Logic
-    const seeds = [
-        "Your growth is not always visible, but it is always happening.",
-        "Like the forest after rain, you will smell sweeter and stand taller after the storm.",
-        "One leaf doesn't make a tree. Give yourself time to build your strength.",
-        "Even the sun must set to let the world rest. It's okay for you to rest too.",
-        "You don't have to be perfect to be a beautiful part of nature."
-    ];
+    let history = [];
 
-    // Set the daily seed based on the day of the year
-    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    document.getElementById('dailySeed').innerText = "Today's Seed: " + seeds[dayOfYear % seeds.length];
+    function processThought() {
+        const input = document.getElementById('thoughtInput').value;
+        if(!input) return;
 
-    let isPlaying = false;
-    const audio = document.getElementById('natureSound');
+        const resultDiv = document.getElementById('reframeResult');
+        const garden = document.getElementById('garden');
+        
+        // Simple AI Logic
+        const reframes = [
+            "This challenge is refining your strength.",
+            "You are breathing through the storm.",
+            "Energy is shifting toward a solution.",
+            "This moment does not define your future."
+        ];
+        const randomReframe = reframes[Math.floor(Math.random() * reframes.length)];
 
-    function toggleSound() {
-        if (!isPlaying) {
-            audio.play();
-            document.getElementById('soundBtn').innerText = "🔊 Nature Sounds: On";
-            document.getElementById('soundBtn').style.background = "#DFF0D8";
-        } else {
-            audio.pause();
-            document.getElementById('soundBtn').innerText = "🔈 Nature Sounds: Off";
-            document.getElementById('soundBtn').style.background = "white";
-        }
-        isPlaying = !isPlaying;
+        // Update UI
+        resultDiv.innerText = "✨ " + randomReframe;
+        resultDiv.style.display = 'block';
+
+        // Grow a plant in the garden
+        const plants = ["🌱", "🌿", "🍀", "🌸", "🌻"];
+        const newPlant = document.createElement('span');
+        newPlant.className = 'plant';
+        newPlant.innerText = plants[Math.floor(Math.random() * plants.length)];
+        garden.appendChild(newPlant);
+
+        // Save to History
+        addHistory(randomReframe);
+        
+        document.getElementById('thoughtInput').value = "";
     }
 
-    function transformThought() {
-        const input = document.getElementById('userInput').value.toLowerCase();
-        const outputDiv = document.getElementById('output');
+    function addHistory(text) {
+        const list = document.getElementById('historyList');
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerText = text;
+        list.prepend(item);
         
-        const responses = {
-            lonely: "🌿 Nature is never truly lonely; the roots always talk to the trees. You are part of something bigger than this moment.",
-            angry: "🌊 The ocean is powerful but calm underneath. Take three deep breaths and let the waves of anger pull back.",
-            stress: "🍃 A heavy snow can bend a branch, but the branch doesn't break—it eventually lets the snow fall. Release your burden.",
-            default: "☀️ You have survived 100% of your hardest days. You are as resilient as the earth itself."
-        };
-
-        let result = responses.default;
-        if (input.includes("lonely")) result = responses.lonely;
-        else if (input.includes("angry") || input.includes("mad")) result = responses.angry;
-        else if (input.includes("stress") || input.includes("sad") || input.includes("tired")) result = responses.stress;
-
-        outputDiv.innerHTML = `<strong>Growth Note:</strong><br>${result}`;
-        outputDiv.style.display = 'block';
-        document.getElementById('userInput').value = "";
+        if(list.children.length > 3) list.lastChild.remove();
     }
 </script>
 
