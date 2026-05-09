@@ -328,5 +328,330 @@ const responses = {
     ],
     Stress: [
         'One deep breath can change this moment 🌱',
-        'You do not need to car
+        'You do not need to carry everything alone 🌻'
+    ],
+    Lonely: [
+        'Your feelings matter and you are not invisible 🌼',
+        'Even forests grow one tree at a time 🌳'
+    ],
+    Peace: [
+        'Peace grows slowly like nature 🌿'
+    ]
+};
+
+function renderGarden() {
+    garden.innerHTML = '';
+
+    for(let i = 0; i < count; i++) {
+        const p = document.createElement('span');
+        p.className = 'plant';
+        p.innerText = plants[Math.floor(Math.random() * plants.length)];
+        garden.appendChild(p);
+    }
+
+    document.getElementById('pCount').innerText = count;
+    document.getElementById('pLevel').innerText = Math.min(count * 10, 100) + '%';
+    document.getElementById('streak').innerText = streak;
+}
+
+function renderHistory() {
+    historyList.innerHTML = '';
+
+    history.slice(-5).reverse().forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerText = item;
+        historyList.appendChild(div);
+    });
+}
+
+function selectMood(button, mood) {
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    button.classList.add('active');
+    selectedMood = mood;
+}
+
+function processThought() {
+    const input = document.getElementById('thoughtInput').value.trim();
+
+    if(!input) {
+        alert('Please write something first 🌿');
+        return;
+    }
+
+    if(navigator.vibrate) {
+        navigator.vibrate(50);
+    }
+
+    count++;
+
+    localStorage.setItem('plantCount', count);
+
+    const randomPlant = document.createElement('span');
+    randomPlant.className = 'plant';
+    randomPlant.innerText = plants[Math.floor(Math.random() * plants.length)];
+    garden.appendChild(randomPlant);
+
+    const moodResponses = responses[selectedMood];
+    const randomMsg = moodResponses[Math.floor(Math.random() * moodResponses.length)];
+
+    const box = document.getElementById('messageBox');
+    box.style.display = 'block';
+    box.innerText = randomMsg;
+
+    history.push(input);
+    localStorage.setItem('history', JSON.stringify(history));
+
+    document.getElementById('thoughtInput').value = '';
+
+    renderGarden();
+    renderHistory();
+}
+
+async function shareApp() {
+    const shareData = {
+        title: 'Nature Reframe',
+        text: `I planted ${count} peaceful thoughts 🌿`,
+        url: window.location.href
+    };
+
+    try {
+        await navigator.share(shareData);
+    } catch(err) {
+        alert('Copy this link: ' + window.location.href);
+    }
+}
+
+function toggleMusic() {
+    const music = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+
+    if(music.paused) {
+        music.play();
+        btn.innerText = '🔊 Mute';
+    } else {
+        music.pause();
+        btn.innerText = '🔈 Music';
+    }
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+}
+
+function resetGarden() {
+    if(confirm('Reset your healing garden?')) {
+        count = 0;
+        history = [];
+
+        localStorage.removeItem('plantCount');
+        localStorage.removeItem('history');
+
+        renderGarden();
+        renderHistory();
+
+        document.getElementById('messageBox').style.display = 'none';
+    }
+}
+
+renderGarden();
+renderHistory();
+
+</script>
+
+</body>
+</html>
 ```
+
+# Bugs Fixed
+
+* Fixed peace percentage exceeding 100%
+* Added local storage persistence
+* Added proper mood system
+* Added dark mode
+* Added healing messages
+* Added reset feature
+* Added thought history
+* Fixed empty input handling
+* Improved responsive layout
+* Added garden scrolling
+* Improved animations
+
+# Meditation Music Library Feature
+
+Add this section below the garden area:
+
+```html
+<div class="music-library">
+    <h3>🎵 Meditation Sounds</h3>
+
+    <button class="sound-btn" onclick="playTrack('rain')">
+        🌧 Rain Calm
+    </button>
+
+    <button class="sound-btn" onclick="playTrack('forest')">
+        🌲 Forest Peace
+    </button>
+
+    <button class="sound-btn" onclick="playTrack('ocean')">
+        🌊 Ocean Relax
+    </button>
+
+    <button class="sound-btn" onclick="stopTrack()">
+        ⏹ Stop Sound
+    </button>
+</div>
+```
+
+Add this CSS:
+
+```css
+.music-library {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.sound-btn {
+    width: 100%;
+    margin-bottom: 10px;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--mint);
+    color: var(--forest);
+    font-weight: bold;
+    cursor: pointer;
+}
+```
+
+Add these audio elements above `<script>`:
+
+```html
+<audio id="rainTrack" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="forestTrack" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="oceanTrack" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+</audio>
+```
+
+Add these JavaScript functions:
+
+```js
+function stopTrack() {
+    document.getElementById('rainTrack').pause();
+    document.getElementById('forestTrack').pause();
+    document.getElementById('oceanTrack').pause();
+}
+
+function playTrack(type) {
+    stopTrack();
+
+    if(type === 'rain') {
+        document.getElementById('rainTrack').play();
+    }
+
+    if(type === 'forest') {
+        document.getElementById('forestTrack').play();
+    }
+
+    if(type === 'ocean') {
+        document.getElementById('oceanTrack').play();
+    }
+}
+```
+
+# Daily Affirmations Feature
+
+Add this section below the stats section:
+
+```html
+<div class="affirmation-box">
+    <h3>🌞 Daily Affirmation</h3>
+    <p id="affirmationText"></p>
+
+    <button class="btn-main" onclick="newAffirmation()">
+        ✨ New Affirmation
+    </button>
+</div>
+```
+
+Add this CSS:
+
+```css
+.affirmation-box {
+    width: 100%;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 15px;
+    background: var(--mint);
+    text-align: center;
+}
+
+#affirmationText {
+    font-size: 1rem;
+    margin: 15px 0;
+    font-weight: bold;
+}
+```
+
+Add these affirmations inside JavaScript:
+
+```js
+const affirmations = [
+    'I deserve peace and happiness 🌿',
+    'I am stronger than my stress ✨',
+    'Healing happens one step at a time 🌱',
+    'I choose calm over chaos 🌸',
+    'My mind and body deserve rest 🌙',
+    'I release negative thoughts today 💚',
+    'I am growing emotionally every day 🌻'
+];
+```
+
+Add this function:
+
+```js
+function newAffirmation() {
+    const random = affirmations[Math.floor(Math.random() * affirmations.length)];
+    document.getElementById('affirmationText').innerText = random;
+}
+```
+
+Then initialize it at the
+
+## Phase 2
+
+* AI chatbot companion
+* Guided breathing timer
+* Meditation music library
+* Daily affirmations
+* Sleep stories
+* Community healing wall
+
+## Phase 3
+
+* Login system
+* Firebase database
+* User profiles
+* Mood analytics charts
+* Therapist directory
+* Emergency calming mode
+
+# Free Deployment
+
+Upload this file to:
+
+* Netlify
+* Vercel
+* GitHub Pages
+
+Then your app becomes live publicly.
