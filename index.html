@@ -655,3 +655,52 @@ Upload this file to:
 * GitHub Pages
 
 Then your app becomes live publicly.
+<div class="bottom-nav">
+  <button onclick="showScreen('home')">🏡</button>
+  <button onclick="showScreen('music')">🎵</button>
+  <button onclick="showScreen('chat')">🤖</button>
+  <button onclick="showScreen('journal')">📖</button>
+</div>
+<div id="home" class="screen active-screen">
+   <h1>Nature Reframe</h1>
+   <p>Your healing space 🌿</p>
+</div>
+
+<div id="music" class="screen">
+   <h2>Meditation Music</h2>
+</div>
+
+<div id="chat" class="screen">
+   <h2>AI Calm Chat</h2>
+</div>
+
+<div id="journal" class="screen">
+   <h2>Healing Journal</h2>
+</div>
+
+.screen {
+   display: none;
+   width: 100%;
+}
+
+.active-screen {
+   display: block;
+}
+
+.bottom-nav {
+   position: fixed;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   background: white;
+   display: flex;
+   justify-content: space-around;
+   padding: 12px;
+   box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+}
+
+.bottom-nav button {
+   border: none;
+   background: transparent;
+   font-size: 1.5rem;
+}
