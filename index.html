@@ -1,46 +1,305 @@
+# Nature Reframe — Complete Wellness App (HTML/CSS/JS)
+
+Save this as `index.html` and open it in your browser.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nature Reframe | Pro Experience</title>
-    <style>
-        :root { --forest: #2D5A27; --mint: #DCE7DA; --earth: #6D4C41; }
-        body { margin: 0; background: #E3F2FD; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; min-height: 100vh; color: var(--forest); }
-        .app-shell { width: 100%; max-width: 450px; background: white; padding: 25px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 40px rgba(0,0,0,0.05); }
-        
-        /* Audio Controls */
-        .audio-pill { background: var(--mint); padding: 8px 20px; border-radius: 30px; font-size: 0.8rem; margin-bottom: 20px; cursor: pointer; border: none; color: var(--forest); font-weight: bold; }
-        
-        .garden-area { height: 100px; display: flex; align-items: flex-end; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #eee; width: 100%; justify-content: center; overflow: hidden; }
-        .plant { font-size: 1.8rem; animation: grow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes grow { from { transform: translateY(20px) scale(0); } to { transform: translateY(0) scale(1); } }
-        
-        textarea { width: 100%; height: 90px; border: 1.5px solid var(--mint); border-radius: 15px; padding: 15px; font-size: 1rem; margin-bottom: 15px; box-sizing: border-box; outline: none; }
-        .btn-main { background: var(--forest); color: white; border: none; width: 100%; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
-        .btn-share { background: white; color: var(--forest); border: 1.5px solid var(--forest); width: 100%; padding: 12px; border-radius: 15px; font-weight: bold; cursor: pointer; font-size: 0.9rem; }
-        
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin: 15px 0; }
-        .stat-card { background: #f9f9f9; padding: 10px; border-radius: 12px; text-align: center; font-size: 0.8rem; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nature Reframe</title>
+
+<style>
+:root {
+    --forest: #2D5A27;
+    --mint: #DCE7DA;
+    --earth: #6D4C41;
+    --bg: #E8F5E9;
+    --card: #ffffff;
+    --text: #1b4332;
+}
+
+body.dark {
+    --bg: #121212;
+    --card: #1f1f1f;
+    --text: #f1f1f1;
+    --mint: #2d2d2d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    color: var(--text);
+    transition: 0.3s ease;
+}
+
+.app-shell {
+    width: 100%;
+    max-width: 460px;
+    background: var(--card);
+    padding: 24px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: breathe 5s infinite ease-in-out;
+}
+
+@keyframes breathe {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+}
+
+.top-controls {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.audio-pill,
+.dark-btn {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    background: var(--mint);
+    color: var(--forest);
+}
+
+.garden-area {
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    overflow-x: auto;
+    border-bottom: 2px solid #ddd;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.plant {
+    font-size: 2rem;
+    animation: grow 0.6s ease;
+}
+
+@keyframes grow {
+    from {
+        transform: translateY(20px) scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+h1 {
+    margin: 10px 0;
+    font-size: 2rem;
+}
+
+.subtitle {
+    margin-bottom: 20px;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.mood-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.mood-btn {
+    border: none;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    background: var(--mint);
+    font-size: 1.2rem;
+}
+
+.mood-btn.active {
+    background: var(--forest);
+    color: white;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    border-radius: 15px;
+    border: 2px solid var(--mint);
+    padding: 15px;
+    resize: none;
+    outline: none;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background: transparent;
+    color: var(--text);
+}
+
+.btn-main,
+.btn-share,
+.btn-reset {
+    width: 100%;
+    border: none;
+    padding: 14px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.btn-main {
+    background: var(--forest);
+    color: white;
+}
+
+.btn-share {
+    background: transparent;
+    border: 2px solid var(--forest);
+    color: var(--forest);
+}
+
+.btn-reset {
+    background: #d32f2f;
+    color: white;
+}
+
+.stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.stat-card {
+    background: var(--mint);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+#messageBox {
+    width: 100%;
+    margin-top: 15px;
+    background: #f1f8e9;
+    padding: 15px;
+    border-radius: 15px;
+    display: none;
+    text-align: center;
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+body.dark #messageBox {
+    background: #2c3e2f;
+    color: #b9f6ca;
+}
+
+.history {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.history h3 {
+    margin-bottom: 10px;
+}
+
+.history-item {
+    background: var(--mint);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+</style>
 </head>
 <body>
 
 <div class="app-shell">
-    <button class="audio-pill" onclick="toggleMusic()" id="musicBtn">🔈 Play Lo-Fi Rain</button>
-    
-    <div class="garden-area" id="garden"><span class="plant">🌳</span></div>
 
-    <h2 style="margin:0 0 10px 0; text-align: center;">Nature Reframe</h2>
-    <textarea id="thoughtInput" placeholder="Let go of anger or stress here..."></textarea>
-    
-    <button class="btn-main" onclick="processThought()">Plant Positive Thought</button>
-    <button class="btn-share" onclick="shareApp()">📤 Share My Peace</button>
+    <div class="top-controls">
+        <button class="audio-pill" onclick="toggleMusic()" id="musicBtn">
+            🔈 Music
+        </button>
+
+        <button class="dark-btn" onclick="toggleDarkMode()">
+            🌙 Theme
+        </button>
+    </div>
+
+    <div class="garden-area" id="garden"></div>
+
+    <h1>Nature Reframe</h1>
+    <div class="subtitle">
+        Release stress. Grow peace.
+    </div>
+
+    <div class="mood-row">
+        <button class="mood-btn" onclick="selectMood(this, 'Angry')">😡</button>
+        <button class="mood-btn" onclick="selectMood(this, 'Sad')">😢</button>
+        <button class="mood-btn" onclick="selectMood(this, 'Stress')">😰</button>
+        <button class="mood-btn" onclick="selectMood(this, 'Lonely')">😔</button>
+    </div>
+
+    <textarea id="thoughtInput" placeholder="Write your thoughts here..."></textarea>
+
+    <button class="btn-main" onclick="processThought()">
+        🌱 Plant Positive Thought
+    </button>
+
+    <button class="btn-share" onclick="shareApp()">
+        📤 Share My Peace
+    </button>
+
+    <button class="btn-reset" onclick="resetGarden()">
+        🗑 Reset Garden
+    </button>
+
+    <div id="messageBox"></div>
 
     <div class="stats">
-        <div class="stat-card">🌱 Plants: <span id="pCount">1</span></div>
-        <div class="stat-card">✨ Peace: <span id="pLevel">10%</span></div>
+        <div class="stat-card">
+            🌱 Plants<br>
+            <span id="pCount">0</span>
+        </div>
+
+        <div class="stat-card">
+            ✨ Peace<br>
+            <span id="pLevel">0%</span>
+        </div>
+
+        <div class="stat-card">
+            🔥 Streak<br>
+            <span id="streak">1</span>
+        </div>
     </div>
+
+    <div class="history">
+        <h3>Recent Healing Thoughts</h3>
+        <div id="historyList"></div>
+    </div>
+
 </div>
 
 <audio id="bgMusic" loop>
@@ -48,55 +307,26 @@
 </audio>
 
 <script>
-    let count = 1;
-    let isMusicPlaying = false;
-    const music = document.getElementById('bgMusic');
 
-    function toggleMusic() {
-        if (!isMusicPlaying) {
-            music.play();
-            document.getElementById('musicBtn').innerText = "🔊 Mute Music";
-        } else {
-            music.pause();
-            document.getElementById('musicBtn').innerText = "🔈 Play Lo-Fi Rain";
-        }
-        isMusicPlaying = !isMusicPlaying;
-    }
+let count = Number(localStorage.getItem('plantCount')) || 0;
+let streak = Number(localStorage.getItem('streak')) || 1;
+let history = JSON.parse(localStorage.getItem('history')) || [];
+let selectedMood = 'Peace';
 
-    function processThought() {
-        const input = document.getElementById('thoughtInput').value;
-        if(!input) return;
+const plants = ['🌱', '🌿', '🌸', '🌻', '🌳', '🌲'];
+const garden = document.getElementById('garden');
+const historyList = document.getElementById('historyList');
 
-        // Vibrate
-        if (navigator.vibrate) navigator.vibrate(50);
-
-        count++;
-        document.getElementById('pCount').innerText = count;
-        document.getElementById('pLevel').innerText = (count * 10) + "%";
-
-        const plants = ["🌱", "🌿", "🌸", "🌻", "🌳", "🌲"];
-        const p = document.createElement('span');
-        p.className = 'plant';
-        p.innerText = plants[Math.floor(Math.random() * plants.length)];
-        document.getElementById('garden').appendChild(p);
-
-        document.getElementById('thoughtInput').value = "";
-    }
-
-    // PHASE 2: SHARE FEATURE
-    async function shareApp() {
-        const shareData = {
-            title: 'Nature Reframe',
-            text: `I've grown ${count} plants and reached ${count * 10}% Peace today! 🌿 Join me in reframing stress.`,
-            url: window.location.href
-        };
-
-        try {
-            await navigator.share(shareData);
-        } catch (err) {
-            alert("Share this link with friends: " + window.location.href);
-        }
-    }
-</script>
-</body>
-</html>
+const responses = {
+    Angry: [
+        'Anger fades when calm grows 🌿',
+        'Pause. Breathe. You are in control ✨'
+    ],
+    Sad: [
+        'Healing takes time and that is okay 💚',
+        'You deserve kindness today 🌸'
+    ],
+    Stress: [
+        'One deep breath can change this moment 🌱',
+        'You do not need to car
+```
