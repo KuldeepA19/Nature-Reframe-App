@@ -1,15 +1,17 @@
 {
-  "name": "Nature Reframe",
   "short_name": "Reframe",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#E3F2FD",
-  "theme_color": "#2D5A27",
+  "name": "Nature Reframe Wellness",
+  "description": "Transform stress and anger into a digital garden.",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/628/628283.png",
+      "type": "image/png",
       "sizes": "512x512",
-      "type": "image/png"
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2d5a27",
+  "background_color": "#e8f5e9"
 }
